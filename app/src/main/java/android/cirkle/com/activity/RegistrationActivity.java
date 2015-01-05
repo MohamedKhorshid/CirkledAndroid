@@ -2,7 +2,6 @@ package android.cirkle.com.activity;
 
 import android.app.Activity;
 import android.cirkle.com.R;
-import android.cirkle.com.service.UserService;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;

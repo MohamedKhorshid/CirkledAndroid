@@ -1,12 +1,12 @@
 package android.cirkle.com.rest;
 
-import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
 import android.cirkle.com.exception.SystemErrorCode;
-import android.cirkle.com.http.CirkleResponse;
-import android.cirkle.com.http.HttpResponseResolver;
+import android.cirkle.com.response.CirkleResponse;
+import android.cirkle.com.response.HttpResponseResolver;
+import android.cirkle.com.response.ValidationErrorResponse;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,7 +47,7 @@ public class RESTUtil {
         return "http://cirkle-nodejs.herokuapp.com";
     }
 
-    public void post(String path, Map<String, String> params) throws CirkleException {
+    public void post(String path, Map<String, String> params) throws CirkleSystemException, CirkleBusinessException {
 
         String serviceURL = getServerConnectionString() + "/users";
 
@@ -78,6 +78,11 @@ public class RESTUtil {
             String response = EntityUtils.toString(httpResponse.getEntity());
 
             CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response);
+
+            if(cirkleResponse instanceof ValidationErrorResponse) {
+
+                // TODO throw validation exception throw new CirkleBusinessException();
+            }
 
         } catch (IOException e) {
             throw new CirkleSystemException(SystemErrorCode.REST_IO_OPERATION_FAILED, e);

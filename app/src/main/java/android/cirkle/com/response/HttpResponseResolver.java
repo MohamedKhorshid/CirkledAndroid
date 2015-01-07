@@ -1,4 +1,4 @@
-package android.cirkle.com.http;
+package android.cirkle.com.response;
 
 import android.cirkle.com.exception.CirkleSystemException;
 import android.cirkle.com.exception.SystemErrorCode;
@@ -27,7 +27,7 @@ public class HttpResponseResolver {
         CirkleResponse cirkleResponse = CirkleResponseFactory.getCirkleResponse(type);
 
         if(cirkleResponse instanceof InvalidResponse) {
-            throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Could not parse response: " + response));
+            throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Invalid response type: " + type + ". Response: " + response));
         }
 
         return cirkleResponse;

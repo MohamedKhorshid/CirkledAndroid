@@ -2,6 +2,8 @@ package android.cirkle.com.activity;
 
 import android.app.Activity;
 import android.cirkle.com.R;
+import android.cirkle.com.exception.CirkleException;
+import android.cirkle.com.services.UserService;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -36,7 +38,11 @@ class RegisterUserTask extends AsyncTask<String, Void, Void> {
         String password = strings[1];
         String displayName = strings[2];
 
-        new UserService().addUser(email, password, displayName);
+        try {
+            new UserService().addUser(email, password, displayName);
+        } catch(CirkleException cex) {
+            // display message to screen
+        }
 
         return null;
     }

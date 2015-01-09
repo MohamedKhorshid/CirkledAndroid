@@ -77,7 +77,7 @@ public class RESTUtil {
             HttpResponse httpResponse =  client.execute(post);
             String response = EntityUtils.toString(httpResponse.getEntity());
 
-            CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response);
+            CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response, httpResponse.getStatusLine().getStatusCode());
 
             if(cirkleResponse instanceof ValidationErrorResponse) {
 

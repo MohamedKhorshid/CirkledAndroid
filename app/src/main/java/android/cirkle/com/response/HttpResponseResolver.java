@@ -13,21 +13,14 @@ import org.json.JSONObject;
  */
 public class HttpResponseResolver {
 
-    public static CirkleResponse resolve(String response) throws CirkleSystemException {
+    public static CirkleResponse resolve(String response, int statusCode) throws CirkleSystemException {
 
-        JSONObject jsonResponse = JsonParser.parse(response);
+        // JSONObject jsonResponse = JsonParser.parse(response);
 
-        String type = null;
-        try {
-            type = jsonResponse.getString(JsonAttr.TYPE.getName());
-        } catch (JSONException jex){
-            throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Could not parse response: " + response, jex));
-        }
-
-        CirkleResponse cirkleResponse = CirkleResponseFactory.getCirkleResponse(type);
+        CirkleResponse cirkleResponse = CirkleResponseFactory.getCirkleResponse(statusCode);
 
         if(cirkleResponse instanceof InvalidResponse) {
-            throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Invalid response type: " + type + ". Response: " + response));
+            throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Invalid response: " + response));
         }
 
         return cirkleResponse;

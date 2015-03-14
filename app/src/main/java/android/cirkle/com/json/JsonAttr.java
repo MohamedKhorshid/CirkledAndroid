@@ -5,7 +5,9 @@ package android.cirkle.com.json;
  */
 public enum JsonAttr {
 
-    TYPE("type");
+    TYPE("type"),
+    ERROR_PARAM_MESSAGE("message"),
+    ERROR_PARAM_NAME("parameter");
 
     String name;
 

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cirkle</string>
+    <string name="invalid.request">Invalid request</string>
+    <string name="missing.required.fields">Please enter all required fields</string>
 </resources>

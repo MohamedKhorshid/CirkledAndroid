@@ -2,6 +2,7 @@ package android.cirkle.com.activity;
 
 import android.app.Activity;
 import android.cirkle.com.R;
+import android.cirkle.com.error.ErrorMessage;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
@@ -48,6 +49,8 @@ class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
         String password = strings[1];
         String displayName = strings[2];
 
+        // validate parameters
+
         try {
             new UserService().addUser(email, password, displayName);
         } catch(CirkleException cex) {
@@ -64,7 +67,7 @@ class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
         } else if (result.getStatus() == AsyncTaskResultStatus.FAILED){
             if(result.getException() instanceof CirkleBusinessException) {
                 CirkleBusinessException businessException = (CirkleBusinessException) result.getException();
-                Toast.makeText(context, businessException.getCode().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, ErrorMessage.format(businessException.getErrorCode(), context), Toast.LENGTH_LONG).show();
             } else if(result.getException() instanceof CirkleSystemException){
                 CirkleSystemException systemException = (CirkleSystemException) result.getException();
                 Toast.makeText(context, systemException.getCode() + " " + systemException.getException().getMessage(), Toast.LENGTH_LONG).show();

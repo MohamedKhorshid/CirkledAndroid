@@ -1,5 +1,6 @@
 package android.cirkle.com.rest;
 
+import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
@@ -21,6 +22,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +82,8 @@ public class RESTUtil {
             CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response, httpResponse.getStatusLine().getStatusCode());
 
             if(cirkleResponse instanceof ValidationErrorResponse) {
-
-                // TODO throw validation exception throw new CirkleBusinessException();
+                String errorCode = BusinessErrorCode.getErrorCode(response);
+                throw new CirkleBusinessException(errorCode);
             }
 
         } catch (IOException e) {

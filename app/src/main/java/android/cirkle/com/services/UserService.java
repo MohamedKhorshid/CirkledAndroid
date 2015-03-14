@@ -15,6 +15,10 @@ public class UserService {
 
     public void addUser(String email, String password, String displayName) throws CirkleSystemException, CirkleBusinessException {
 
+        if(email.trim().equals("") || password.trim().equals("")) {
+            throw new CirkleBusinessException("missing.required.fields");
+        }
+
         Map<String, String> params = new HashMap<>();
 
         params.put("email", email);

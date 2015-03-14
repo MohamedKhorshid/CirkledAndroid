@@ -49,8 +49,6 @@ class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
         String password = strings[1];
         String displayName = strings[2];
 
-        // validate parameters
-
         try {
             new UserService().addUser(email, password, displayName);
         } catch(CirkleException cex) {

@@ -1,9 +1,11 @@
 package android.cirkle.com.services;
 
+import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
 import android.cirkle.com.rest.RESTUtil;
+import android.util.Patterns;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,10 +15,18 @@ import java.util.Map;
  */
 public class UserService {
 
-    public void addUser(String email, String password, String displayName) throws CirkleSystemException, CirkleBusinessException {
+    public void addUser(String email, String password, String password2, String displayName) throws CirkleSystemException, CirkleBusinessException {
 
-        if(email.trim().equals("") || password.trim().equals("")) {
-            throw new CirkleBusinessException("missing.required.fields");
+        if(!email.trim().isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            throw new CirkleBusinessException(BusinessErrorCode.INVALID_EMAIL);
+        }
+
+        if(email.trim().isEmpty() || password.trim().isEmpty() || password2.trim().isEmpty()) {
+            throw new CirkleBusinessException(BusinessErrorCode.MISSING_REQUIRED_FIELDS);
+        }
+
+        if(!password.equals(password2)) {
+            throw new CirkleBusinessException(BusinessErrorCode.PASSWORD_MISMATCH);
         }
 
         Map<String, String> params = new HashMap<>();

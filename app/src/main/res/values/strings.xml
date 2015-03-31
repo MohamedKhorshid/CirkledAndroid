@@ -2,4 +2,12 @@
     <string name="app_name">Cirkle</string>
     <string name="invalid.request">Invalid request</string>
     <string name="missing.required.fields">Please enter all required fields</string>
+    <string name="invalid.email">Please enter a valid E-mail</string>
+    <string name="password.mismatch">Password mismatch</string>
+    <string name="user.exists">This email is already registered</string>
+    <string name="label.email">Email</string>
+    <string name="label.password">Password</string>
+    <string name="label.reenter.password">Re-enter password</string>
+    <string name="label.display.name">Display name</string>
+    <string name="button.register">Register</string>
 </resources>

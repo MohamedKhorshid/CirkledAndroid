@@ -82,7 +82,7 @@ public class RESTUtil {
             CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response, httpResponse.getStatusLine().getStatusCode());
 
             if(cirkleResponse instanceof ValidationErrorResponse) {
-                String errorCode = BusinessErrorCode.getErrorCode(response);
+                BusinessErrorCode errorCode = BusinessErrorCode.parseErrorCode(response);
                 throw new CirkleBusinessException(errorCode);
             }
 

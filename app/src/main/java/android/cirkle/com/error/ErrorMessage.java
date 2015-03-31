@@ -1,5 +1,6 @@
 package android.cirkle.com.error;
 
+import android.cirkle.com.exception.BusinessErrorCode;
 import android.content.Context;
 
 /**
@@ -7,8 +8,17 @@ import android.content.Context;
  */
 public class ErrorMessage {
 
-    public static String format(String code, Context context) {
-        int id = context.getResources().getIdentifier(code, "string", context.getPackageName());
+    public static String format(BusinessErrorCode code, Context context) {
+        if(code == null) {
+            return "";
+        }
+
+        int id = context.getResources().getIdentifier(code.getMessage(), "string", context.getPackageName());
+
+        if(id == 0) {
+            return "";
+        }
+
         return context.getResources().getString(id);
     }
 }

@@ -28,9 +28,10 @@ public class RegistrationActivity extends Activity {
 
         String email = ((EditText)findViewById(R.id.reg_email)).getText().toString();
         String password = ((EditText)findViewById(R.id.reg_password)).getText().toString();
+        String password2 = ((EditText)findViewById(R.id.reg_password2)).getText().toString();
         String displayName = ((EditText)findViewById(R.id.reg_display_name)).getText().toString();
 
-        new RegisterUserTask(getApplicationContext()).execute(email, password, displayName);
+        new RegisterUserTask(getApplicationContext()).execute(email, password, password2, displayName);
 
     }
 }
@@ -47,10 +48,11 @@ class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
     protected AsyncTaskResult doInBackground(String... strings) {
         String email = strings[0];
         String password = strings[1];
-        String displayName = strings[2];
+        String password2 = strings[2];
+        String displayName = strings[3];
 
         try {
-            new UserService().addUser(email, password, displayName);
+            new UserService().addUser(email, password, password2, displayName);
         } catch(CirkleException cex) {
             return new AsyncTaskResult(cex);
         }

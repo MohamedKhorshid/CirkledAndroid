@@ -9,13 +9,13 @@ import java.util.Map;
  */
 public class CirkleBusinessException extends CirkleException{
 
-    private String errorCode;
-
-    public CirkleBusinessException(String errorCode) {
+    public CirkleBusinessException(BusinessErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 
-    public String getErrorCode() {
+    private BusinessErrorCode errorCode;
+
+    public BusinessErrorCode getErrorCode() {
         return errorCode;
     }
 }

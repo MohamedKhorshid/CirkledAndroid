@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:Theme.Material.Light">
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
+
+        <!-- Colors -->
+
+        <item name="android:colorBackground">@color/off_white</item>
+        <item name="android:colorButtonNormal">@color/purple</item>
+        <item name="android:colorPrimaryDark">@color/purple</item>
+        <item name="android:navigationBarColor">@color/purple</item>
+
+        <!-- Controls -->
+        <item name="android:textAppearanceButton">@style/AppButton</item>
+        <item name="android:editTextStyle">@style/AppTextEdit</item>
+
+    </style>
+
+    <style name="AppButton" parent="android:TextAppearance.Material.Button">
+        <item name="android:textColor">@color/off_white</item>
+        <item name="android:layout_marginTop">200dp</item>
+    </style>
+
+    <style name="AppTextEdit" parent="android:Widget.Material.Light.EditText">
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:background">@drawable/text_edit</item>
+        <item name="android:textColor">@color/purple</item>
     </style>
 </resources>

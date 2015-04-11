@@ -4,25 +4,35 @@ import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
+import android.cirkle.com.exception.CirkleUnauthorizedException;
 import android.cirkle.com.exception.SystemErrorCode;
 import android.cirkle.com.response.CirkleResponse;
 import android.cirkle.com.response.HttpResponseResolver;
+import android.cirkle.com.response.UnauthorizedResponse;
 import android.cirkle.com.response.ValidationErrorResponse;
+import android.cirkle.com.session.SessionUtil;
+import android.util.Base64;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.AbstractHttpMessage;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,16 +59,61 @@ public class RESTUtil {
         return "http://cirkle-nodejs.herokuapp.com";
     }
 
-    public void post(String path, Map<String, String> params) throws CirkleSystemException, CirkleBusinessException {
+    public CirkleResponse post(String path, Map<String, String> params) throws CirkleException {
 
-        String serviceURL = getServerConnectionString() + "/users";
+        String serviceURL = getServerConnectionString() + path;
 
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(serviceURL);
 
+        appendHttpHeader(post);
+
+        appendPostParams(post, params);
+
+        return executeHttpRequest(post, client);
+
+    }
+
+    public CirkleResponse get(String path, Map<String, String> params) throws CirkleException {
+
+        String serviceURL = getServerConnectionString() + path;
+
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(serviceURL);
+
+        appendHttpHeader(get);
+
+        appendGetParams(get, params);
+
+        return executeHttpRequest(get, client);
+
+    }
+
+    private CirkleResponse executeHttpRequest(HttpUriRequest request, HttpClient client) throws CirkleException {
+        try {
+            HttpResponse httpResponse =  client.execute(request);
+            String response = EntityUtils.toString(httpResponse.getEntity());
+
+            CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response, httpResponse.getStatusLine().getStatusCode());
+
+            if(cirkleResponse instanceof ValidationErrorResponse) {
+                BusinessErrorCode errorCode = BusinessErrorCode.parseErrorCode(response);
+                throw new CirkleBusinessException(errorCode);
+            } else if (cirkleResponse instanceof UnauthorizedResponse) {
+                throw new CirkleUnauthorizedException();
+            }
+
+            return cirkleResponse;
+
+        } catch (IOException e) {
+            throw new CirkleSystemException(SystemErrorCode.REST_IO_OPERATION_FAILED, e);
+        }
+    }
+
+    private void appendPostParams(HttpPost post, Map<String, String> params) throws CirkleSystemException {
         HttpEntity entity = null;
 
-        List<NameValuePair> nameValuePairs = new ArrayList<>(3);
+        List<NameValuePair> nameValuePairs = new ArrayList<>(params.size());
 
         Iterator<String> itr = params.keySet().iterator();
 
@@ -74,21 +129,29 @@ public class RESTUtil {
         }
 
         post.setEntity(entity);
+    }
 
-        try {
-            HttpResponse httpResponse =  client.execute(post);
-            String response = EntityUtils.toString(httpResponse.getEntity());
+    private void appendGetParams(HttpGet get, Map<String, String> params) {
+        HttpParams httpParams = new BasicHttpParams();
 
-            CirkleResponse cirkleResponse = HttpResponseResolver.resolve(response, httpResponse.getStatusLine().getStatusCode());
-
-            if(cirkleResponse instanceof ValidationErrorResponse) {
-                BusinessErrorCode errorCode = BusinessErrorCode.parseErrorCode(response);
-                throw new CirkleBusinessException(errorCode);
-            }
-
-        } catch (IOException e) {
-            throw new CirkleSystemException(SystemErrorCode.REST_IO_OPERATION_FAILED, e);
+        Iterator<String> itr = params.keySet().iterator();
+        while(itr.hasNext()) {
+            String key = itr.next();
+            httpParams.setParameter(key, params.get(key));
         }
 
+        get.setParams(httpParams);
+    }
+
+    private void appendHttpHeader(AbstractHttpMessage message) {
+
+        if(SessionUtil.getInstance().isLoggedIn()) {
+            String email = SessionUtil.getInstance().getEmail();
+            String password = SessionUtil.getInstance().getPassword();
+
+            message.addHeader("authorization", "Basic " + Base64.encodeToString((email + ":" + password).getBytes(), Base64.NO_WRAP));
+        }
+
+        message.addHeader("accept", "application/json");
     }
 }

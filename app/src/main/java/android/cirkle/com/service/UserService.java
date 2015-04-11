@@ -1,4 +1,4 @@
-package android.cirkle.com.services;
+package android.cirkle.com.service;
 
 import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class UserService {
 
-    public void addUser(String email, String password, String password2, String displayName) throws CirkleSystemException, CirkleBusinessException {
+    public void addUser(String email, String password, String password2, String displayName) throws CirkleException {
 
         if(!email.trim().isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             throw new CirkleBusinessException(BusinessErrorCode.INVALID_EMAIL);
@@ -35,7 +35,7 @@ public class UserService {
         params.put("password", password);
         params.put("displayname", displayName);
 
-        RESTUtil.getInstance().post("/users", params);
+        RESTUtil.getInstance().post(ServiceURL.REGISTER.getUrl(), params);
 
     }
 }

@@ -14,6 +14,8 @@ public class HttpResponseResolver {
 
         if(cirkleResponse instanceof InvalidResponse) {
             throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Invalid response: " + response));
+        } else if(cirkleResponse instanceof OkResponse) {
+            cirkleResponse.setBody(response);
         }
 
         return cirkleResponse;

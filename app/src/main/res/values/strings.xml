@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Cirkle</string>
     <string name="invalid.request">Invalid request</string>
     <string name="missing.required.fields">Please enter all required fields</string>
@@ -10,4 +12,5 @@
     <string name="label.reenter.password">Re-enter password</string>
     <string name="label.display.name">Display name</string>
     <string name="button.register">Register</string>
+
 </resources>

@@ -6,13 +6,16 @@ import android.cirkle.com.error.ErrorMessage;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
-import android.cirkle.com.services.UserService;
+import android.cirkle.com.service.UserService;
+import android.cirkle.com.session.SessionUtil;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.apache.http.impl.client.BasicResponseHandler;
 
 /**
  * Created by Mohamed Wagdy on 1/3/2015.
@@ -53,6 +56,8 @@ class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
 
         try {
             new UserService().addUser(email, password, password2, displayName);
+            SessionUtil.getInstance().setEmail(email);
+            SessionUtil.getInstance().setPassword(password);
         } catch(CirkleException cex) {
             return new AsyncTaskResult(cex);
         }
@@ -62,18 +67,6 @@ class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
 
     @Override
     protected void onPostExecute(AsyncTaskResult result) {
-        if(result.getStatus() == AsyncTaskResultStatus.OK) {
-            Toast.makeText(context, "User registered successfully", Toast.LENGTH_LONG).show();
-        } else if (result.getStatus() == AsyncTaskResultStatus.FAILED){
-            if(result.getException() instanceof CirkleBusinessException) {
-                CirkleBusinessException businessException = (CirkleBusinessException) result.getException();
-                Toast.makeText(context, ErrorMessage.format(businessException.getErrorCode(), context), Toast.LENGTH_LONG).show();
-            } else if(result.getException() instanceof CirkleSystemException){
-                CirkleSystemException systemException = (CirkleSystemException) result.getException();
-                Toast.makeText(context, systemException.getCode() + " " + systemException.getException().getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-        }
-
+        ResponseHandler.handleResponse(result, context);
     }
 }

@@ -27,6 +27,7 @@ public class AsyncTaskResult {
         return exception;
     }
 }
+
 enum AsyncTaskResultStatus {
     OK, FAILED;
 }

@@ -14,6 +14,8 @@ public class CirkleResponseFactory {
             return new ValidationErrorResponse();
         } else if(responseType == ResponseType.INVALID.code) {
             return new InvalidResponse();
+        } else if(responseType == ResponseType.UNAUTHORIZED.code) {
+            return new UnauthorizedResponse();
         } else {
             return new InvalidResponse();
         }

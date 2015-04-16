@@ -6,57 +6,70 @@ import android.cirkle.com.error.ErrorMessage;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
+import android.cirkle.com.model.Cirkle;
+import android.cirkle.com.service.CirkleService;
 import android.cirkle.com.service.UserService;
 import android.cirkle.com.session.SessionUtil;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.impl.client.BasicResponseHandler;
+import java.util.List;
 
-/**
- * Created by Mohamed Wagdy on 1/3/2015.
- */
-public class RegistrationActivity extends Activity {
+
+public class EditCirkleActivity extends Activity {
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.registration);
-    }
 
-    public void onRegistrationBtnClick(View view) {
+        setContentView(R.layout.add_cirkle);
 
-        String email = ((EditText)findViewById(R.id.reg_email)).getText().toString();
-        String password = ((EditText)findViewById(R.id.reg_password)).getText().toString();
-        String password2 = ((EditText)findViewById(R.id.reg_password2)).getText().toString();
-        String displayName = ((EditText)findViewById(R.id.reg_display_name)).getText().toString();
-
-        new RegisterUserTask(getApplicationContext()).execute(email, password, password2, displayName);
+        bindButtons();
 
     }
 
-    class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
+    private void bindButtons() {
+        Button addCirkleBtn = (Button) findViewById(R.id.add_cirkle_btn);
+        addCirkleBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                String cirkleName = ((EditText) findViewById(R.id.add_cirkle_txt_name)).getText().toString();
+
+                new AddCirkleTask(getApplicationContext()).execute(cirkleName);
+
+            }
+        });
+    }
+
+    class AddCirkleTask extends AsyncTask<String, Void, AsyncTaskResult> {
 
         private Context context;
 
-        public RegisterUserTask(Context context) {
+        public AddCirkleTask(Context context) {
             this.context = context;
         }
 
         @Override
         protected AsyncTaskResult doInBackground(String... strings) {
-            String email = strings[0];
-            String password = strings[1];
-            String password2 = strings[2];
-            String displayName = strings[3];
+            String cirkleName = strings[0];
 
             try {
-                new UserService().addUser(email, password, password2, displayName);
-                SessionUtil.getInstance().setEmail(email);
-                SessionUtil.getInstance().setPassword(password);
+                new CirkleService().addCirkle(cirkleName);
             } catch(CirkleException cex) {
                 return new AsyncTaskResult(cex);
             }
@@ -69,7 +82,9 @@ public class RegistrationActivity extends Activity {
             ResponseHandler.handleResponse(result, context, new IResponseHandler() {
                 @Override
                 public void handleSuccess(Object object) {
-                    Toast.makeText(context, "User registered successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Cirkle added successfully", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(EditCirkleActivity.this, HomeActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override
@@ -84,4 +99,5 @@ public class RegistrationActivity extends Activity {
             });
         }
     }
+
 }

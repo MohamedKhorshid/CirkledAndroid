@@ -13,12 +13,6 @@ public class ErrorMessage {
             return "";
         }
 
-        int id = context.getResources().getIdentifier(code.getMessage(), "string", context.getPackageName());
-
-        if(id == 0) {
-            return "";
-        }
-
-        return context.getResources().getString(id);
+        return context.getResources().getString(code.getMessage());
     }
 }

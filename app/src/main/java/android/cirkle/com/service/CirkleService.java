@@ -1,13 +1,11 @@
 package android.cirkle.com.service;
 
-import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
-import android.cirkle.com.exception.CirkleSystemException;
 import android.cirkle.com.model.Cirkle;
 import android.cirkle.com.response.CirkleResponse;
+import android.cirkle.com.response.CirkleResponseParser;
 import android.cirkle.com.rest.RESTUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +21,16 @@ public class CirkleService {
 
         CirkleResponse response = RESTUtil.getInstance().get(ServiceURL.CIRCLE.getUrl(), params);
 
-        List<Cirkle> cirkles = new ArrayList<>();
+        return CirkleResponseParser.getInstance().parseCirkles(response.getBody());
 
-        // parse response
+    }
 
-        return cirkles;
+    public Cirkle addCirkle(String cirkleName) throws CirkleException {
+        Map<String, String> params = new HashMap<>();
+        params.put("cirkleName", cirkleName);
 
+        CirkleResponse response = RESTUtil.getInstance().post(ServiceURL.CIRCLE.getUrl(), params);
+
+        return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
     }
 }

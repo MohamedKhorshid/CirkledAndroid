@@ -9,6 +9,12 @@ public class AsyncTaskResult {
 
     private CirkleException exception;
     private AsyncTaskResultStatus status;
+    private Object object;
+
+    public AsyncTaskResult(Object object) {
+        this();
+        this.object = object;
+    }
 
     public AsyncTaskResult(CirkleException ex) {
         this.exception = ex;
@@ -25,6 +31,10 @@ public class AsyncTaskResult {
 
     public CirkleException getException() {
         return exception;
+    }
+
+    public Object getObject() {
+        return object;
     }
 }
 

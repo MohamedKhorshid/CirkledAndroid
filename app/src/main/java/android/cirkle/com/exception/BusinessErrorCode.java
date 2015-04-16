@@ -1,5 +1,6 @@
 package android.cirkle.com.exception;
 
+import android.cirkle.com.R;
 import android.cirkle.com.json.JsonAttr;
 import android.cirkle.com.json.JsonParser;
 
@@ -16,19 +17,19 @@ import java.util.Map;
  */
 public enum BusinessErrorCode {
 
-    MISSING_REQUIRED_FIELDS("missing.required.fields"),
-    INVALID_REQUEST("invalid.request"),
-    INVALID_EMAIL("invalid.email"),
-    PASSWORD_MISMATCH("password.mismatch"),
-    USER_EXISTS("user.exists");
+    MISSING_REQUIRED_FIELDS(R.string.registration_missing_required_fields),
+    INVALID_REQUEST(R.string.invalid_request),
+    INVALID_EMAIL(R.string.registration_invalid_email),
+    PASSWORD_MISMATCH(R.string.registration_password_mismatch),
+    USER_EXISTS(R.string.registration_user_exists);
 
-    private String message;
+    private int message;
 
-    BusinessErrorCode (String message) {
+    BusinessErrorCode (int message) {
         this.message = message;
     }
 
-    public String getMessage() {
+    public int getMessage() {
         return message;
     }
 

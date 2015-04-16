@@ -53,4 +53,13 @@ public class JsonParser {
             throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED, e);
         }
     }
+
+    public static int getJsonInt(JSONObject jsonObj, String name) throws CirkleSystemException{
+
+        try {
+            return jsonObj.getInt(name);
+        } catch (JSONException e) {
+            throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED, e);
+        }
+    }
 }

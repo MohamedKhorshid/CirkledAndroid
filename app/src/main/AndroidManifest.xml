@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegistrationActivity" />
+        <activity android:name=".activity.EditCirkleActivity" />
     </application>
 
 </manifest>

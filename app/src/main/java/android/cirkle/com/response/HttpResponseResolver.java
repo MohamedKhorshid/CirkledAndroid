@@ -1,7 +1,6 @@
 package android.cirkle.com.response;
 
 import android.cirkle.com.exception.CirkleSystemException;
-import android.cirkle.com.exception.SystemErrorCode;
 
 /**
  * Created by Mohamed Wagdy on 1/7/2015
@@ -12,8 +11,8 @@ public class HttpResponseResolver {
 
         CirkleResponse cirkleResponse = CirkleResponseFactory.getCirkleResponse(statusCode);
 
-        if(cirkleResponse instanceof InvalidResponse) {
-            throw new CirkleSystemException(SystemErrorCode.INVALID_RESPONSE, new Exception("Invalid response: " + response));
+        if(cirkleResponse instanceof SystemErrorResponse) {
+            throw new CirkleSystemException(((SystemErrorResponse) cirkleResponse).getErrorCode(), new Exception(response));
         } else if(cirkleResponse instanceof OkResponse) {
             cirkleResponse.setBody(response);
         }

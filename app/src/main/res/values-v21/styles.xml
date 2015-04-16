@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Material.Light">
 
         <!-- Colors -->
 
@@ -8,10 +8,14 @@
         <item name="android:colorButtonNormal">@color/purple</item>
         <item name="android:colorPrimaryDark">@color/purple</item>
         <item name="android:navigationBarColor">@color/purple</item>
+        <item name="android:colorPrimary">@color/light_purple</item>
+        <item name="android:textColorPrimary">@color/off_white</item>
 
         <!-- Controls -->
         <item name="android:textAppearanceButton">@style/AppButton</item>
         <item name="android:editTextStyle">@style/AppTextEdit</item>
+        <item name="android:listViewStyle">@style/AppListView</item>
+        <item name="android:textViewStyle">@style/AppTextView</item>
 
     </style>
 
@@ -25,5 +29,15 @@
         <item name="android:layout_marginBottom">2dp</item>
         <item name="android:background">@drawable/text_edit</item>
         <item name="android:textColor">@color/purple</item>
+    </style>
+
+    <style name="AppTextView" parent="android:Widget.Material.Light.TextView">
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/purple</item>
+    </style>
+
+    <style name="AppListView" parent="android:Widget.Material.Light.ListView">
+        <item name="android:padding">10dp</item>
+        <item name="android:itemBackground">@color/purple</item>
     </style>
 </resources>

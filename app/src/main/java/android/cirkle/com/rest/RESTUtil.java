@@ -76,14 +76,12 @@ public class RESTUtil {
 
     public CirkleResponse get(String path, Map<String, String> params) throws CirkleException {
 
-        String serviceURL = getServerConnectionString() + path;
+        String serviceURL = getServerConnectionString() + path + appendGetParams(params);;
 
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(serviceURL);
 
         appendHttpHeader(get);
-
-        appendGetParams(get, params);
 
         return executeHttpRequest(get, client);
 
@@ -131,16 +129,21 @@ public class RESTUtil {
         post.setEntity(entity);
     }
 
-    private void appendGetParams(HttpGet get, Map<String, String> params) {
-        HttpParams httpParams = new BasicHttpParams();
+    private String appendGetParams(Map<String, String> params) {
+
+        StringBuilder builder = new StringBuilder("?");
 
         Iterator<String> itr = params.keySet().iterator();
         while(itr.hasNext()) {
             String key = itr.next();
-            httpParams.setParameter(key, params.get(key));
+            builder.append(key);
+            builder.append("=");
+            builder.append(params.get(key));
+            builder.append("&");
         }
 
-        get.setParams(httpParams);
+        return builder.toString();
+
     }
 
     private void appendHttpHeader(AbstractHttpMessage message) {

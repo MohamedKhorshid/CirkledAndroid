@@ -34,8 +34,8 @@ public class CirkleResponseParser {
         for(int i = 0; i < cirklesArray.length(); i++) {
             JSONObject cirkleObj = JsonParser.getJsonObject(cirklesArray, i);
 
-            String cirkleName = JsonParser.getJsonString(cirkleObj, "cirkleName");
-            int cirkleId = JsonParser.getJsonInt(cirkleObj, "cirkleId");
+            String cirkleName = JsonParser.getJsonString(cirkleObj, "name");
+            int cirkleId = JsonParser.getJsonInt(cirkleObj, "cirkleid");
 
             Cirkle cirkle = new Cirkle();
             cirkle.setTitle(cirkleName);

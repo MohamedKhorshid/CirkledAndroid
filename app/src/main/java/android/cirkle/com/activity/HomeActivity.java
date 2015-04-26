@@ -126,9 +126,6 @@ public class HomeActivity extends Activity {
             }
         });
 
-
-        // init recycle view
-
     }
 
 }

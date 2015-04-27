@@ -4,10 +4,15 @@ import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
+import android.cirkle.com.model.Cirkle;
+import android.cirkle.com.model.User;
+import android.cirkle.com.response.CirkleResponse;
+import android.cirkle.com.response.UserResponseParser;
 import android.cirkle.com.rest.RESTUtil;
 import android.util.Patterns;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +41,16 @@ public class UserService {
         params.put("displayname", displayName);
 
         RESTUtil.getInstance().post(ServiceURL.REGISTER.getUrl(), params);
+
+    }
+
+    public List<User> searchUsers(String searchText) throws CirkleException{
+        Map<String, String> params = new HashMap<>();
+        params.put("searchText", searchText);
+
+        CirkleResponse response = RESTUtil.getInstance().get(ServiceURL.SEARCH_USERS.getUrl(), params);
+
+        return UserResponseParser.getInstance().parseUsers(response.getBody());
 
     }
 }

@@ -6,7 +6,8 @@ package android.cirkle.com.service;
 public enum ServiceURL {
     REGISTER("/public/register"),
     LOGIN("/public/login"),
-    CIRCLES("/cirkles");
+    CIRCLES("/cirkles"),
+    SEARCH_USERS("/search/users");
 
     private String url;
 

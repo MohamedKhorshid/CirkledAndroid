@@ -3,33 +3,23 @@ package android.cirkle.com.activity;
 import android.app.Activity;
 import android.cirkle.com.R;
 import android.cirkle.com.component.AutoCompleteAdapter;
-import android.cirkle.com.component.MyAutoCompleteTextView;
+import android.cirkle.com.component.CirkleAutoCompleteTextView;
 import android.cirkle.com.error.ErrorMessage;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
-import android.cirkle.com.model.Cirkle;
 import android.cirkle.com.model.User;
 import android.cirkle.com.service.CirkleService;
-import android.cirkle.com.session.SessionUtil;
+import android.cirkle.com.service.UserService;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,35 +54,34 @@ public class EditCirkleActivity extends Activity {
         });
 
         // auto complete
-        final MyAutoCompleteTextView autoComplete = (MyAutoCompleteTextView) findViewById(R.id.add_cirkle_member_ac);
+        final CirkleAutoCompleteTextView autoComplete = (CirkleAutoCompleteTextView) findViewById(R.id.add_cirkle_member_ac);
+        autoComplete.setThreshold(1);
 
-        autoComplete.setAdapter(new AutoCompleteAdapter<Cirkle>() {
+        autoComplete.setAdapter(new AutoCompleteAdapter<User>() {
             @Override
-            public List<Cirkle> getAutoCompleteResults(CharSequence charSequence) {
+            public List<User> getAutoCompleteResults(CharSequence charSequence) {
                 try {
-                    return new CirkleService().getCirkles();
+                    return new UserService().searchUsers((String) charSequence);
                 } catch (CirkleException e) {
-                    e.printStackTrace();
+                    Toast.makeText(EditCirkleActivity.this, "Failed to search member", Toast.LENGTH_SHORT).show();
                     return null;
                 }
             }
 
             @Override
             public View getView(int position, View convertView, ViewGroup viewGroup) {
-                Cirkle cirkle = getItem(position);
+                User user = getItem(position);
 
                 if (convertView == null) {
                     convertView = LayoutInflater.from(EditCirkleActivity.this).inflate(R.layout.list_row, viewGroup, false);
                 }
 
                 TextView title = (TextView) convertView.findViewById(R.id.cirkle_row_title);
-                title.setText(cirkle.getTitle());
+                title.setText(user.getDisplayName());
 
                 return convertView;
             }
         });
-
-        autoComplete.setThreshold(1);
 
     }
 

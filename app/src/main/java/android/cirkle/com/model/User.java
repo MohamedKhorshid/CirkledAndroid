@@ -7,6 +7,7 @@ public class User {
 
     private int userId;
     private String displayName;
+    private String email;
 
     public int getUserId() {
         return userId;
@@ -22,5 +23,13 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

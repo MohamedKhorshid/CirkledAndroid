@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,6 +56,12 @@ public class EditCirkleActivity extends Activity {
 
         // auto complete
         final CirkleAutoCompleteTextView autoComplete = (CirkleAutoCompleteTextView) findViewById(R.id.add_cirkle_member_ac);
+        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowId) {
+                User user = (User) view.getTag();
+            }
+        });
         autoComplete.setThreshold(1);
 
         autoComplete.setAdapter(new AutoCompleteAdapter<User>() {
@@ -69,6 +76,16 @@ public class EditCirkleActivity extends Activity {
             }
 
             @Override
+            public CharSequence getObjectAsString(User user) {
+                if(!user.getDisplayName().isEmpty()) {
+                    return user.getDisplayName();
+                } else {
+                    return user.getEmail();
+                }
+
+            }
+
+            @Override
             public View getView(int position, View convertView, ViewGroup viewGroup) {
                 User user = getItem(position);
 
@@ -76,8 +93,15 @@ public class EditCirkleActivity extends Activity {
                     convertView = LayoutInflater.from(EditCirkleActivity.this).inflate(R.layout.list_row, viewGroup, false);
                 }
 
+                convertView.setTag(user);
+
                 TextView title = (TextView) convertView.findViewById(R.id.cirkle_row_title);
-                title.setText(user.getDisplayName());
+
+                if(!user.getDisplayName().isEmpty()) {
+                    title.setText(user.getDisplayName());
+                } else {
+                    title.setText(user.getEmail());
+                }
 
                 return convertView;
             }

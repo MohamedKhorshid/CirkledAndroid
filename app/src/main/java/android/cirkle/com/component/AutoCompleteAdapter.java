@@ -34,6 +34,11 @@ public abstract class AutoCompleteAdapter<T> extends BaseAdapter implements Filt
     }
 
     public abstract List<T> getAutoCompleteResults(CharSequence charSequence);
+    public CharSequence convertResultToString(Object result) {
+        return getObjectAsString((T) result);
+    }
+
+    public abstract CharSequence getObjectAsString(T object);
 
     @Override
     public Filter getFilter() {
@@ -41,6 +46,10 @@ public abstract class AutoCompleteAdapter<T> extends BaseAdapter implements Filt
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 FilterResults filterResults = new FilterResults();
+
+                if(charSequence == null || charSequence.length() == 0) {
+                    return filterResults;
+                }
 
                 List<T> results = getAutoCompleteResults(charSequence);
 
@@ -62,6 +71,11 @@ public abstract class AutoCompleteAdapter<T> extends BaseAdapter implements Filt
                     notifyDataSetInvalidated();
                 }
 
+            }
+
+            @Override
+            public CharSequence convertResultToString(Object resultValue) {
+                return AutoCompleteAdapter.this.convertResultToString(resultValue);
             }
         };
     }

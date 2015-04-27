@@ -40,11 +40,8 @@ public class UserResponseParser {
             int userId = JsonParser.getJsonInt(cirkleObj, "userid");
 
             User user = new User();
-            if(!displayName.isEmpty()) {
-                user.setDisplayName(displayName);
-            } else {
-                user.setDisplayName(email);
-            }
+
+            user.setDisplayName(displayName);
             user.setEmail(email);
             user.setUserId(userId);
 

@@ -3,11 +3,17 @@ package android.cirkle.com.service;
 import android.cirkle.com.exception.BusinessErrorCode;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
+import android.cirkle.com.exception.CirkleSystemException;
+import android.cirkle.com.exception.SystemErrorCode;
+import android.cirkle.com.json.JsonParser;
 import android.cirkle.com.model.Cirkle;
+import android.cirkle.com.model.User;
 import android.cirkle.com.response.CirkleResponse;
 import android.cirkle.com.response.CirkleResponseParser;
 import android.cirkle.com.rest.RESTUtil;
 import android.cirkle.com.session.SessionUtil;
+
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +35,7 @@ public class CirkleService {
 
     }
 
-    public Cirkle addCirkle(String cirkleName) throws CirkleException {
+    public Cirkle addCirkle(String cirkleName, List<User> members) throws CirkleException {
 
         if(cirkleName.trim().isEmpty()) {
             throw new CirkleBusinessException(BusinessErrorCode.MISSING_REQUIRED_FIELDS);
@@ -38,6 +44,11 @@ public class CirkleService {
         Map<String, String> params = new HashMap<>();
         params.put("cirkleName", cirkleName);
         params.put("admin", SessionUtil.getInstance().getEmail());
+        try {
+            params.put("members", JsonParser.getArray(members));
+        } catch (JSONException ex) {
+            throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED ,ex);
+        }
 
         CirkleResponse response = RESTUtil.getInstance().post(ServiceURL.CIRCLES.getUrl(), params);
 

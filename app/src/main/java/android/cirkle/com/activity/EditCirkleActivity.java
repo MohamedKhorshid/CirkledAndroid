@@ -8,6 +8,9 @@ import android.cirkle.com.error.ErrorMessage;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
+import android.cirkle.com.json.JsonParser;
+import android.cirkle.com.model.Cirkle;
+import android.cirkle.com.model.JSONifiable;
 import android.cirkle.com.model.User;
 import android.cirkle.com.service.CirkleService;
 import android.cirkle.com.service.UserService;
@@ -18,12 +21,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,9 +44,17 @@ public class EditCirkleActivity extends Activity {
 
         setContentView(R.layout.add_cirkle);
 
+        initClassMembers();
+
         bindControls();
 
     }
+
+    private void initClassMembers() {
+        members = new ArrayList<>();
+    }
+
+    private List<User> members;
 
     private void bindControls() {
         // add button
@@ -54,12 +70,40 @@ public class EditCirkleActivity extends Activity {
             }
         });
 
+        // members list
+        final ListView membersList = (ListView) findViewById(R.id.add_cirkle_members_list);
+        membersList.setAdapter(new ArrayAdapter<User>(getApplicationContext(), 0, members) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                User user = getItem(position);
+
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_row, parent, false);
+                }
+
+                TextView title = (TextView) convertView.findViewById(R.id.row_label);
+                if (!user.getDisplayName().isEmpty()) {
+                    title.setText(user.getDisplayName());
+                } else {
+                    title.setText(user.getEmail());
+                }
+
+                return convertView;
+            }
+        });
+
         // auto complete
-        final CirkleAutoCompleteTextView autoComplete = (CirkleAutoCompleteTextView) findViewById(R.id.add_cirkle_member_ac);
+        final CirkleAutoCompleteTextView autoComplete = (CirkleAutoCompleteTextView) findViewById(R.id.add_cirkle_members_ac);
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowId) {
                 User user = (User) view.getTag();
+                members.add(user);
+                Adapter adapter = membersList.getAdapter();
+                if(adapter instanceof BaseAdapter) {
+                    ((BaseAdapter) adapter).notifyDataSetChanged();
+                }
+                autoComplete.setText("");
             }
         });
         autoComplete.setThreshold(1);
@@ -77,7 +121,7 @@ public class EditCirkleActivity extends Activity {
 
             @Override
             public CharSequence getObjectAsString(User user) {
-                if(!user.getDisplayName().isEmpty()) {
+                if (!user.getDisplayName().isEmpty()) {
                     return user.getDisplayName();
                 } else {
                     return user.getEmail();
@@ -95,9 +139,9 @@ public class EditCirkleActivity extends Activity {
 
                 convertView.setTag(user);
 
-                TextView title = (TextView) convertView.findViewById(R.id.cirkle_row_title);
+                TextView title = (TextView) convertView.findViewById(R.id.row_label);
 
-                if(!user.getDisplayName().isEmpty()) {
+                if (!user.getDisplayName().isEmpty()) {
                     title.setText(user.getDisplayName());
                 } else {
                     title.setText(user.getEmail());
@@ -122,7 +166,7 @@ public class EditCirkleActivity extends Activity {
             String cirkleName = strings[0];
 
             try {
-                new CirkleService().addCirkle(cirkleName);
+                new CirkleService().addCirkle(cirkleName, members);
             } catch (CirkleException cex) {
                 return new AsyncTaskResult(cex);
             }

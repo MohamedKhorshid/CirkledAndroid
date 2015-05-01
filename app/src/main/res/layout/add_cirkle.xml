@@ -11,17 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/add.cirkle.label.name"
-        android:id="@+id/add_cirkle_txt_name"/>
-    
+        android:id="@+id/add_cirkle_txt_name"
+        android:layout_marginTop="1dp"/>
+
     <android.cirkle.com.component.CirkleAutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/add_cirkle_member_ac"/>
-    
+        android:id="@+id/add_cirkle_members_ac"
+        android:hint="@string/add.cirkle.label.member"
+        android:layout_marginTop="1dp"/>
+
+    <ListView
+        android:id="@+id/add_cirkle_members_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add.cirkle.button.add"
-        android:id="@+id/add_cirkle_btn"/>
+        android:id="@+id/add_cirkle_btn"
+        android:layout_marginTop="1dp"/>
 
 </LinearLayout>

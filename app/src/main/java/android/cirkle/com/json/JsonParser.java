@@ -2,10 +2,16 @@ package android.cirkle.com.json;
 
 import android.cirkle.com.exception.CirkleSystemException;
 import android.cirkle.com.exception.SystemErrorCode;
+import android.cirkle.com.model.JSONifiable;
+import android.cirkle.com.model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
+import org.json.JSONTokener;
+
+import java.util.List;
 
 /**
  * Created by Mohamed Wagdy on 1/7/2015
@@ -61,5 +67,15 @@ public class JsonParser {
         } catch (JSONException e) {
             throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED, e);
         }
+    }
+
+    public static String getArray(List<? extends JSONifiable> array) throws JSONException {
+        JSONStringer jsonArray = new JSONStringer();
+        jsonArray.array();
+        for(JSONifiable item : array) {
+            item.jsonify(jsonArray);
+        }
+        jsonArray.endArray();
+        return jsonArray.toString();
     }
 }

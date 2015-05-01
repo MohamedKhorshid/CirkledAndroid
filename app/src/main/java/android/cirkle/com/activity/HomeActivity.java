@@ -120,7 +120,7 @@ public class HomeActivity extends Activity {
                     convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_row, parent, false);
                 }
 
-                TextView title = (TextView) convertView.findViewById(R.id.cirkle_row_title);
+                TextView title = (TextView) convertView.findViewById(R.id.row_label);
                 title.setText(cirkle.getTitle());
                 return convertView;
             }

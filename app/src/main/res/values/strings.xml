@@ -15,5 +15,6 @@
     <string name="menu.add.cirkle">Add Cirkle</string>
     <string name="add.cirkle.label.name">Cirkle name</string>
     <string name="add.cirkle.button.add">Add Cirkle</string>
+    <string name="add.cirkle.label.member">Add member</string>
 
 </resources>

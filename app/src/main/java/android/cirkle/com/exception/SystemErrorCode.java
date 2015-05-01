@@ -11,5 +11,6 @@ public enum SystemErrorCode {
     UNRECOGNIZED_RESPONSE,
     NOT_FOUND,
 
-    JSON_PARSE_FAILED;
+    JSON_PARSE_FAILED,
+    JSON_COVERT_FAILED;
 }

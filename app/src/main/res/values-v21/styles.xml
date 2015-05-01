@@ -16,6 +16,7 @@
         <item name="android:editTextStyle">@style/AppTextEdit</item>
         <item name="android:listViewStyle">@style/AppListView</item>
         <item name="android:textViewStyle">@style/AppTextView</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AppAutoComplete</item>
 
     </style>
 
@@ -25,6 +26,13 @@
     </style>
 
     <style name="AppTextEdit" parent="android:Widget.Material.Light.EditText">
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:background">@drawable/text_edit</item>
+        <item name="android:textColor">@color/purple</item>
+    </style>
+
+    <style name="AppAutoComplete" parent="android:Widget.Material.Light.AutoCompleteTextView">
         <item name="android:padding">10dp</item>
         <item name="android:layout_marginBottom">2dp</item>
         <item name="android:background">@drawable/text_edit</item>

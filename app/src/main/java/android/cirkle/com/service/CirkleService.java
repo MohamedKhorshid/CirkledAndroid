@@ -27,7 +27,6 @@ public class CirkleService {
     public List<Cirkle> getCirkles() throws CirkleException {
 
         Map<String, String> params = new HashMap<>();
-        params.put("email", SessionUtil.getInstance().getEmail());
 
         CirkleResponse response = RESTUtil.getInstance().get(ServiceURL.CIRCLES.getUrl(), params);
 
@@ -43,7 +42,6 @@ public class CirkleService {
 
         Map<String, String> params = new HashMap<>();
         params.put("cirkleName", cirkleName);
-        params.put("admin", SessionUtil.getInstance().getEmail());
         try {
             params.put("members", JsonParser.getArray(members));
         } catch (JSONException ex) {

@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class Cirkle {
 
-    private int cirkleId;
+    private String cirkleId;
     private String title;
     private List<User> members;
 
@@ -27,11 +27,11 @@ public class Cirkle {
         this.members = members;
     }
 
-    public int getCirkleId() {
+    public String getCirkleId() {
         return cirkleId;
     }
 
-    public void setCirkleId(int cirkleId) {
+    public void setCirkleId(String cirkleId) {
         this.cirkleId = cirkleId;
     }
 }

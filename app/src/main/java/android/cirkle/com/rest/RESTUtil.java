@@ -56,7 +56,7 @@ public class RESTUtil {
     }
 
     private String getServerConnectionString() {
-        return "http://cirkle-nodejs.herokuapp.com";
+        return "http://cirkle.mybluemix.net";
     }
 
     public CirkleResponse post(String path, Map<String, String> params) throws CirkleException {

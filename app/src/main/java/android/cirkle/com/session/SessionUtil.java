@@ -20,7 +20,7 @@ public class SessionUtil {
     private String password;
 
     public String getEmail() {
-        return "mohamed@wagdy.com";//email;
+        return "mohamedwagdykhorshid@gmail.com";//email;
     }
 
     public void setEmail(String email) {
@@ -28,7 +28,7 @@ public class SessionUtil {
     }
 
     public String getPassword() {
-        return "mohamed"; //password;
+        return "12345678"; //password;
     }
 
     public void setPassword(String password) {

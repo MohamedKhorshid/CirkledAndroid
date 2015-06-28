@@ -37,7 +37,7 @@ public class UserResponseParser {
 
             String displayName = JsonParser.getJsonString(cirkleObj, "displayname");
             String email = JsonParser.getJsonString(cirkleObj, "email");
-            int userId = JsonParser.getJsonInt(cirkleObj, "userid");
+            String userId = JsonParser.getJsonString(cirkleObj, "_id");
 
             User user = new User();
 

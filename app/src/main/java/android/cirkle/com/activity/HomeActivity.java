@@ -1,131 +1,32 @@
 package android.cirkle.com.activity;
 
 import android.app.Activity;
-import android.cirkle.com.R;
-import android.cirkle.com.exception.CirkleBusinessException;
-import android.cirkle.com.exception.CirkleException;
-import android.cirkle.com.exception.CirkleSystemException;
-import android.cirkle.com.model.Cirkle;
-import android.cirkle.com.service.CirkleService;
-import android.cirkle.com.session.SessionUtil;
-import android.content.Context;
+import android.cirkle.com.session.SessionManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
-
 
 public class HomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // insert dummy login data
-        SessionUtil.getInstance().setEmail("mohamed@wagdy.com");
-        SessionUtil.getInstance().setPassword("mohamed");
-
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.waiting);
+        SessionManager sessionManager = new SessionManager(this);
 
-        new LoadCirklesTask(getApplicationContext()).execute();
-    }
+        boolean isLoggedIn = sessionManager.isLoggedIn();
 
-    class LoadCirklesTask extends AsyncTask<String, Void, AsyncTaskResult>
-    {
-
-        private Context context;
-
-        public LoadCirklesTask(Context context) {
-            this.context = context;
+        Intent i = null;
+        if(isLoggedIn) {
+            i = new Intent(this, CirklesActivity.class);
+        } else {
+            i = new Intent(this, LoginActivity.class);
         }
 
-        @Override
-        protected AsyncTaskResult doInBackground (String...strings){
-            try {
-                List<Cirkle> cirkles = new CirkleService().getCirkles();
-                return new AsyncTaskResult(cirkles);
-            } catch (CirkleException cex) {
-                return new AsyncTaskResult(cex);
-            }
-        }
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        @Override
-        protected void onPostExecute (AsyncTaskResult result){
-            ResponseHandler.handleResponse(result, context, new IResponseHandler() {
-                @Override
-                public void handleSuccess(Object object) {
-                    List<Cirkle> cirkles = (List<Cirkle>) object;
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    // populate cirkles
-                    HomeActivity.this.init(cirkles);
-
-                }
-
-                @Override
-                public void handleBusinessException(CirkleBusinessException exception) {
-
-                }
-
-                @Override
-                public void handleSystemException(CirkleSystemException exception) {
-                    Toast.makeText(context, "Failed to load your cirkles", Toast.LENGTH_LONG).show();
-                }
-            });
-
-        }
+        startActivity(i);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.cirkles_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.cirkles_menu_add:
-                openAddCirkleActivity();
-                return true;
-            default :
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void openAddCirkleActivity() {
-        Intent intent = new Intent(this, EditCirkleActivity.class);
-        startActivity(intent);
-    }
-
-    private void init(List<Cirkle> cirkles) {
-        setContentView(R.layout.home);
-        final ListView listview = (ListView) findViewById(R.id.cirkles_list);
-        listview.setAdapter(new ArrayAdapter<Cirkle>(getApplicationContext(), 0, cirkles) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                Cirkle cirkle = getItem(position);
-
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_row, parent, false);
-                }
-
-                TextView title = (TextView) convertView.findViewById(R.id.row_label);
-                title.setText(cirkle.getTitle());
-                return convertView;
-            }
-        });
-
-    }
-
 }

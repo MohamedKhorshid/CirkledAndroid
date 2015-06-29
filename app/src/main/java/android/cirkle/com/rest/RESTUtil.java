@@ -10,10 +10,10 @@ import android.cirkle.com.response.CirkleResponse;
 import android.cirkle.com.response.HttpResponseResolver;
 import android.cirkle.com.response.UnauthorizedResponse;
 import android.cirkle.com.response.ValidationErrorResponse;
-import android.cirkle.com.session.SessionUtil;
+import android.cirkle.com.session.SessionManager;
+import android.content.Context;
 import android.util.Base64;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -42,21 +42,14 @@ import java.util.Map;
  */
 public class RESTUtil {
 
-    private static RESTUtil instance;
+    Context context;
 
-    private RESTUtil() {
-
-    }
-
-    public static synchronized RESTUtil getInstance() {
-        if(instance == null) {
-            instance = new RESTUtil();
-        }
-        return instance;
+    public RESTUtil(Context context) {
+        this.context = context;
     }
 
     private String getServerConnectionString() {
-        return "http://cirkle.mybluemix.net";
+        return "http://192.168.1.5:8000";//http://cirkle.mybluemix.net";
     }
 
     public CirkleResponse post(String path, Map<String, String> params) throws CirkleException {
@@ -148,9 +141,11 @@ public class RESTUtil {
 
     private void appendHttpHeader(AbstractHttpMessage message) {
 
-        if(SessionUtil.getInstance().isLoggedIn()) {
-            String email = SessionUtil.getInstance().getEmail();
-            String password = SessionUtil.getInstance().getPassword();
+        SessionManager sessionManager = new SessionManager(context);
+
+        if(sessionManager.isLoggedIn()) {
+            String email = sessionManager.getEmail();
+            String password = sessionManager.getPassword();
 
             message.addHeader("authorization", "Basic " + Base64.encodeToString((email + ":" + password).getBytes(), Base64.NO_WRAP));
         }

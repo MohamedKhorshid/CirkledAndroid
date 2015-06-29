@@ -112,7 +112,7 @@ public class EditCirkleActivity extends Activity {
             @Override
             public List<User> getAutoCompleteResults(CharSequence charSequence) {
                 try {
-                    return new UserService().searchUsers((String) charSequence);
+                    return new UserService(EditCirkleActivity.this).searchUsers((String) charSequence);
                 } catch (CirkleException e) {
                     Toast.makeText(EditCirkleActivity.this, "Failed to search member", Toast.LENGTH_SHORT).show();
                     return null;
@@ -166,7 +166,7 @@ public class EditCirkleActivity extends Activity {
             String cirkleName = strings[0];
 
             try {
-                new CirkleService().addCirkle(cirkleName, members);
+                new CirkleService(context).addCirkle(cirkleName, members);
             } catch (CirkleException cex) {
                 return new AsyncTaskResult(cex);
             }
@@ -180,7 +180,7 @@ public class EditCirkleActivity extends Activity {
                 @Override
                 public void handleSuccess(Object object) {
                     Toast.makeText(context, "Cirkle added successfully", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(EditCirkleActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(EditCirkleActivity.this, CirklesActivity.class);
                     startActivity(intent);
                 }
 

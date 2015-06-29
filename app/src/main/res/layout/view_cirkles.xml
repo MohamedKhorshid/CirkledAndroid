@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context="activity.HomeActivity">
+    tools:context="activity.CirklesActivity">
 
     <ListView
         android:id="@+id/cirkles_list"

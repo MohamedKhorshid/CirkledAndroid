@@ -16,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.CirklesActivity" />
         <activity android:name=".activity.RegistrationActivity" />
         <activity android:name=".activity.EditCirkleActivity" />
     </application>

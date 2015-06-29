@@ -11,7 +11,7 @@ import android.cirkle.com.model.User;
 import android.cirkle.com.response.CirkleResponse;
 import android.cirkle.com.response.CirkleResponseParser;
 import android.cirkle.com.rest.RESTUtil;
-import android.cirkle.com.session.SessionUtil;
+import android.content.Context;
 
 import org.json.JSONException;
 
@@ -24,11 +24,17 @@ import java.util.Map;
  */
 public class CirkleService {
 
+    private Context context;
+
+    public CirkleService(Context context) {
+        this.context = context;
+    }
+
     public List<Cirkle> getCirkles() throws CirkleException {
 
         Map<String, String> params = new HashMap<>();
 
-        CirkleResponse response = RESTUtil.getInstance().get(ServiceURL.CIRCLES.getUrl(), params);
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.getUrl(), params);
 
         return CirkleResponseParser.getInstance().parseCirkles(response.getBody());
 
@@ -48,7 +54,7 @@ public class CirkleService {
             throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED ,ex);
         }
 
-        CirkleResponse response = RESTUtil.getInstance().post(ServiceURL.CIRCLES.getUrl(), params);
+        CirkleResponse response = new RESTUtil(context).post(ServiceURL.CIRCLES.getUrl(), params);
 
         return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
     }

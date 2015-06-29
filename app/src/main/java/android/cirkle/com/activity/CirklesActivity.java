@@ -2,6 +2,7 @@ package android.cirkle.com.activity;
 
 import android.app.Activity;
 import android.cirkle.com.R;
+import android.cirkle.com.error.ErrorMessage;
 import android.cirkle.com.exception.CirkleBusinessException;
 import android.cirkle.com.exception.CirkleException;
 import android.cirkle.com.exception.CirkleSystemException;
@@ -11,11 +12,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +29,8 @@ import java.util.List;
 
 
 public class CirklesActivity extends Activity {
+
+    private static final int CONTEXT_MENU_DELETE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +127,78 @@ public class CirklesActivity extends Activity {
             }
         });
 
+        registerForContextMenu(listview);
+
     }
+
+    private void removeCirkleFromList(Cirkle cirkle) {
+        final ListView listview = (ListView) findViewById(R.id.cirkles_list);
+        ((ArrayAdapter)listview.getAdapter()).remove(cirkle);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.cirkles_list) {
+            menu.add(0, CONTEXT_MENU_DELETE, 0, R.string.delete);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Object obj = ((ListView)info.targetView.getParent()).getItemAtPosition(info.position);
+        switch(item.getItemId()) {
+            case CONTEXT_MENU_DELETE:
+                new DeleteCirkleTask(this).execute((Cirkle) obj);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    class DeleteCirkleTask extends AsyncTask<Cirkle, Void, AsyncTaskResult> {
+
+        private Context context;
+
+        public DeleteCirkleTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected AsyncTaskResult doInBackground(Cirkle... cirkles) {
+
+            try {
+                new CirkleService(context).deleteCirkle(cirkles[0]);
+            } catch (CirkleException cex) {
+                return new AsyncTaskResult(cex);
+            }
+
+            return new AsyncTaskResult(cirkles[0]);
+        }
+
+        @Override
+        protected void onPostExecute(AsyncTaskResult result) {
+            ResponseHandler.handleResponse(result, context, new IResponseHandler() {
+                @Override
+                public void handleSuccess(Object object) {
+                    Toast.makeText(context, "Cirkle deleted", Toast.LENGTH_LONG).show();
+                    removeCirkleFromList((Cirkle)object);
+                }
+
+                @Override
+                public void handleBusinessException(CirkleBusinessException exception) {
+                    Toast.makeText(context, ErrorMessage.format(exception.getErrorCode(), context), Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void handleSystemException(CirkleSystemException exception) {
+                    Toast.makeText(context, exception.getCode() + " " + exception.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
 
 }

@@ -23,10 +23,8 @@ public class HomeActivity extends Activity {
             i = new Intent(this, LoginActivity.class);
         }
 
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
         startActivity(i);
+
+        finish();
     }
 }

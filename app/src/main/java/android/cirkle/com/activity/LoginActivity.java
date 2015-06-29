@@ -38,6 +38,14 @@ public class LoginActivity extends Activity {
 
     }
 
+    public void onNewRegBtnClick(View view) {
+        Intent i = new Intent(this, RegistrationActivity.class);
+
+        startActivity(i);
+
+        finish();
+    }
+
     class LoginTask extends AsyncTask<String, Void, AsyncTaskResult> {
 
         private Context context;
@@ -68,13 +76,12 @@ public class LoginActivity extends Activity {
                 @Override
                 public void handleSuccess(Object object) {
                     Toast.makeText(context, "Logged in", Toast.LENGTH_LONG).show();
+
                     Intent i = new Intent(LoginActivity.this, CirklesActivity.class);
 
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
                     startActivity(i);
+
+                    finish();
                 }
 
                 @Override

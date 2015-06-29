@@ -17,4 +17,6 @@
     <string name="add.cirkle.button.add">Add Cirkle</string>
     <string name="add.cirkle.label.member">Add member</string>
 
+    <string name="delete">Delete</string>
+
 </resources>

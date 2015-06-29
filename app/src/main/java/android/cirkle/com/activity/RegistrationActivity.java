@@ -9,6 +9,7 @@ import android.cirkle.com.exception.CirkleSystemException;
 import android.cirkle.com.service.UserService;
 import android.cirkle.com.session.SessionManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -36,6 +37,14 @@ public class RegistrationActivity extends Activity {
 
         new RegisterUserTask(getApplicationContext()).execute(email, password, password2, displayName);
 
+    }
+
+    public void onLoginBtnClick(View view) {
+        Intent i = new Intent(this, LoginActivity.class);
+
+        startActivity(i);
+
+        finish();
     }
 
     class RegisterUserTask extends AsyncTask<String, Void, AsyncTaskResult> {
@@ -71,6 +80,12 @@ public class RegistrationActivity extends Activity {
                 @Override
                 public void handleSuccess(Object object) {
                     Toast.makeText(context, "User registered successfully", Toast.LENGTH_LONG).show();
+
+                    Intent i = new Intent(RegistrationActivity.this, CirklesActivity.class);
+
+                    startActivity(i);
+
+                    finish();
                 }
 
                 @Override

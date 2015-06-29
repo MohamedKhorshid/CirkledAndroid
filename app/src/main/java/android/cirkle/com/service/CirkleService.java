@@ -58,4 +58,8 @@ public class CirkleService {
 
         return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
     }
+
+    public void deleteCirkle(Cirkle cirkle) throws CirkleException{
+        new RESTUtil(context).delete(ServiceURL.CIRCLES.getUrl() + "/" + cirkle.getCirkleId(), new HashMap<String, String>());
+    }
 }

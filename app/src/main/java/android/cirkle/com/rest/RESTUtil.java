@@ -19,6 +19,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -50,6 +51,19 @@ public class RESTUtil {
 
     private String getServerConnectionString() {
         return "http://192.168.1.5:8000";//http://cirkle.mybluemix.net";
+    }
+
+    public CirkleResponse delete(String path, Map<String, String> params) throws CirkleException {
+
+        String serviceURL = getServerConnectionString() + path + appendGetParams(params);;
+
+        HttpClient client = new DefaultHttpClient();
+        HttpDelete delete = new HttpDelete(serviceURL);
+
+        appendHttpHeader(delete);
+
+        return executeHttpRequest(delete, client);
+
     }
 
     public CirkleResponse post(String path, Map<String, String> params) throws CirkleException {

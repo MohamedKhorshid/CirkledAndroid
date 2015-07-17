@@ -52,11 +52,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/reg_btn"
             android:onClick="onRegistrationBtnClick"
-            android:text="@string/registration.button.register" />
+            android:text="@string/registration.button.register"
+            android:layout_marginTop="1dp" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onLoginBtnClick"
-            android:text="Already Registered" />
+            android:text="Already Registered"
+            android:layout_marginTop="1dp" />
     </LinearLayout>
 </LinearLayout>

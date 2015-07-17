@@ -25,10 +25,6 @@ public class CirkleAutoCompleteTextView extends AutoCompleteTextView {
         super(context, attrs, defStyleAttr);
     }
 
-    public CirkleAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     @Override
     protected void performFiltering(CharSequence text, int keyCode) {
         handler.sendMessage(handler.obtainMessage(HANDLER_MESSAGE_WHAT, text));

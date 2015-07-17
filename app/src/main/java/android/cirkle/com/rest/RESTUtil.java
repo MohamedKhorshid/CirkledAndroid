@@ -50,7 +50,8 @@ public class RESTUtil {
     }
 
     private String getServerConnectionString() {
-        return "http://192.168.1.5:8000";//http://cirkle.mybluemix.net";
+        // return "http://192.168.1.5:8000";
+        return "http://cirkle.mybluemix.net";
     }
 
     public CirkleResponse delete(String path, Map<String, String> params) throws CirkleException {

@@ -31,10 +31,7 @@ public class CirkleService {
     }
 
     public List<Cirkle> getCirkles() throws CirkleException {
-
-        Map<String, String> params = new HashMap<>();
-
-        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.getUrl(), params);
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.getUrl());
 
         return CirkleResponseParser.getInstance().parseCirkles(response.getBody());
 
@@ -54,12 +51,18 @@ public class CirkleService {
             throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED ,ex);
         }
 
-        CirkleResponse response = new RESTUtil(context).post(ServiceURL.CIRCLES.getUrl(), params);
+        new RESTUtil(context).post(ServiceURL.CIRCLES.getUrl(), params);
 
-        return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
+        return null;
     }
 
-    public void deleteCirkle(Cirkle cirkle) throws CirkleException{
-        new RESTUtil(context).delete(ServiceURL.CIRCLES.getUrl() + "/" + cirkle.getCirkleId(), new HashMap<String, String>());
+    public void deleteCirkle(Cirkle cirkle) throws CirkleException {
+        new RESTUtil(context).delete(ServiceURL.CIRCLES.getUrl() + "/" + cirkle.getCirkleId());
+    }
+
+    public Cirkle getCirkle(String cirkleId) throws CirkleException {
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.getUrl() + "/" + cirkleId);
+
+        return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
     }
 }

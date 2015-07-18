@@ -127,6 +127,18 @@ public class CirklesActivity extends Activity {
             }
         });
 
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cirkle cirkle =  (Cirkle) ((ListView)parent).getItemAtPosition(position);
+
+                Intent intent = new Intent(CirklesActivity.this, ViewCirkleActivity.class);
+                intent.putExtra("cirkleId" , cirkle.getCirkleId());
+                intent.putExtra("cirkleName" , cirkle.getTitle());
+                startActivity(intent);
+            }
+        });
+
         registerForContextMenu(listview);
 
     }

@@ -13,7 +13,7 @@ public class CirkleResponseFactory {
         } else if(responseType == ResponseType.VALIDATION_ERROR.code) {
             return new ValidationErrorResponse();
         } else if(responseType == ResponseType.INVALID.code) {
-            return new UnrecognizedResponse();
+            return new ServerErrorResponse();
         } else if(responseType == ResponseType.NOT_FOUND.code) {
             return new NotFoundResponse();
         } else if(responseType == ResponseType.UNAUTHORIZED.code) {

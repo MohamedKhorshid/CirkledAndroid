@@ -34,6 +34,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,9 @@ public class RESTUtil {
     }
 
     private String getServerConnectionString() {
-        // return "http://192.168.1.5:8000";
-        return "http://cirkle.mybluemix.net";
+        // return "http://192.168.1.24:8000";
+        return "http://192.168.43.94:8000";
+        // return "http://cirkle.mybluemix.net";
     }
 
     public CirkleResponse delete(String path, Map<String, String> params) throws CirkleException {
@@ -93,6 +95,14 @@ public class RESTUtil {
 
         return executeHttpRequest(get, client);
 
+    }
+
+    public CirkleResponse get(String path) throws CirkleException {
+        return get(path, new HashMap<String, String>());
+    }
+
+    public CirkleResponse delete(String path) throws CirkleException {
+        return delete(path, new HashMap<String, String>());
     }
 
     private CirkleResponse executeHttpRequest(HttpUriRequest request, HttpClient client) throws CirkleException {

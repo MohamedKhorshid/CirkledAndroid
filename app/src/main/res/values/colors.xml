@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_blue">#2B6C98</color>
-    <color name="off_white">#fffffbf0</color>
-    <color name="dark_green">#ff38b86e</color>
+    <color name="cirkle_primary">#2B6C98</color>
+    <color name="cirkle_bg">#fffffbf0</color>
+    <color name="cirkle_light">#ffb2d9f9</color>
     <color name="hint_color">#ffb2b8b2</color>
 
 </resources>

@@ -10,7 +10,7 @@ public enum SystemErrorCode {
 
     UNRECOGNIZED_RESPONSE,
     NOT_FOUND,
+    SERVER_ERROR,
 
-    JSON_PARSE_FAILED,
-    JSON_COVERT_FAILED;
+    JSON_PARSE_FAILED;
 }

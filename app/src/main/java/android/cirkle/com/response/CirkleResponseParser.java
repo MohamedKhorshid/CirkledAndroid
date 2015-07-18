@@ -34,12 +34,7 @@ public class CirkleResponseParser {
         for(int i = 0; i < cirklesArray.length(); i++) {
             JSONObject cirkleObj = JsonParser.getJsonObject(cirklesArray, i);
 
-            String cirkleName = JsonParser.getJsonString(cirkleObj, "name");
-            String cirkleId = JsonParser.getJsonString(cirkleObj, "_id");
-
-            Cirkle cirkle = new Cirkle();
-            cirkle.setTitle(cirkleName);
-            cirkle.setCirkleId(cirkleId);
+            Cirkle cirkle = doParseCirkle(cirkleObj);
             cirkles.add(cirkle);
 
         }
@@ -47,7 +42,22 @@ public class CirkleResponseParser {
         return cirkles;
     }
 
-    public Cirkle parseCirkle(String body) {
-        return new Cirkle();
+    public Cirkle parseCirkle(String cirkleJson) throws CirkleSystemException {
+
+        JSONObject cirkleObj = JsonParser.parseObject(cirkleJson);
+
+        return doParseCirkle(cirkleObj);
+    }
+
+    private Cirkle doParseCirkle(JSONObject cirkleObj) throws CirkleSystemException {
+
+        Cirkle cirkle = new Cirkle();
+
+        String cirkleName = JsonParser.getJsonString(cirkleObj, "name");
+        String cirkleId = JsonParser.getJsonString(cirkleObj, "_id");
+
+        cirkle.setTitle(cirkleName);
+        cirkle.setCirkleId(cirkleId);
+        return cirkle;
     }
 }

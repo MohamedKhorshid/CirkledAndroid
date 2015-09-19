@@ -78,4 +78,9 @@ public class JsonParser {
         jsonArray.endArray();
         return jsonArray.toString();
     }
+
+    public static String getStringArray(List<String> array) throws JSONException {
+        JSONArray jsonArray = new JSONArray(array);
+        return jsonArray.toString();
+    }
 }

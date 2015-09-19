@@ -5,7 +5,7 @@ package com.augenblick.cirkle.connection;
  */
 public class ConnectionUtil {
     public static String getServerConnectionString() {
-        return "http://192.168.1.7:8000";
+        return "http://192.168.43.94:8000";
         // return "http://cirkle.mybluemix.net";
     }
 }

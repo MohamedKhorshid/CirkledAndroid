@@ -1,19 +1,6 @@
 package com.augenblick.cirkle.activity;
 
 import android.app.Activity;
-import com.augenblick.cirkle.R;
-import com.augenblick.cirkle.component.AutoCompleteAdapter;
-import com.augenblick.cirkle.component.CirkleAutoCompleteTextView;
-import com.augenblick.cirkle.error.ErrorMessage;
-import com.augenblick.cirkle.exception.CirkleBusinessException;
-import com.augenblick.cirkle.exception.CirkleException;
-import com.augenblick.cirkle.exception.CirkleSystemException;
-import com.augenblick.cirkle.json.JsonParser;
-import com.augenblick.cirkle.model.Cirkle;
-import com.augenblick.cirkle.model.JSONifiable;
-import com.augenblick.cirkle.model.User;
-import com.augenblick.cirkle.service.CirkleService;
-import com.augenblick.cirkle.service.UserService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,6 +17,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.augenblick.cirkle.R;
+import com.augenblick.cirkle.component.AutoCompleteAdapter;
+import com.augenblick.cirkle.component.CirkleAutoCompleteTextView;
+import com.augenblick.cirkle.error.ErrorMessage;
+import com.augenblick.cirkle.exception.CirkleBusinessException;
+import com.augenblick.cirkle.exception.CirkleException;
+import com.augenblick.cirkle.exception.CirkleSystemException;
+import com.augenblick.cirkle.model.User;
+import com.augenblick.cirkle.service.CirkleService;
+import com.augenblick.cirkle.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +63,7 @@ public class EditCirkleActivity extends Activity {
             public void onClick(View view) {
                 String cirkleName = ((EditText) findViewById(R.id.add_cirkle_txt_name)).getText().toString();
 
-                new AddCirkleTask(getApplicationContext()).execute(cirkleName);
+                new AddCirkleTask(getApplicationContext(), cirkleName).execute();
 
             }
         });
@@ -156,14 +154,15 @@ public class EditCirkleActivity extends Activity {
     class AddCirkleTask extends AsyncTask<String, Void, AsyncTaskResult> {
 
         private Context context;
+        private String cirkleName;
 
-        public AddCirkleTask(Context context) {
+        public AddCirkleTask(Context context, String cirkleName) {
             this.context = context;
+            this.cirkleName = cirkleName;
         }
 
         @Override
         protected AsyncTaskResult doInBackground(String... strings) {
-            String cirkleName = strings[0];
 
             try {
                 new CirkleService(context).addCirkle(cirkleName, members);

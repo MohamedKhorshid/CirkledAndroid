@@ -15,6 +15,7 @@ import android.content.Context;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,12 @@ public class CirkleService {
         Map<String, String> params = new HashMap<>();
         params.put("cirkleName", cirkleName);
         try {
-            params.put("members", JsonParser.getArray(members));
+            List<String> membersIds = new ArrayList<String>();
+            for(User member : members) {
+                membersIds.add(member.getUserId());
+            }
+
+            params.put("members", JsonParser.getStringArray(membersIds));
         } catch (JSONException ex) {
             throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED ,ex);
         }

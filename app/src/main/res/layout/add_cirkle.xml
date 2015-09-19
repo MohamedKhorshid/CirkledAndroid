@@ -14,7 +14,7 @@
         android:id="@+id/add_cirkle_txt_name"
         android:layout_marginTop="1dp"/>
 
-    <android.cirkle.com.component.CirkleAutoCompleteTextView
+    <com.augenblick.cirkle.component.CirkleAutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_cirkle_members_ac"

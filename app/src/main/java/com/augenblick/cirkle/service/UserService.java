@@ -47,7 +47,7 @@ public class UserService {
         params.put("password", password);
         params.put("displayname", displayName);
 
-        new RESTUtil(context).post(ServiceURL.REGISTER.getUrl(), params);
+        new RESTUtil(context).post(ServiceURL.REGISTER.BASE, params);
 
     }
 
@@ -66,7 +66,7 @@ public class UserService {
         params.put("email", email);
         params.put("password", password);
 
-        new RESTUtil(context).post(ServiceURL.LOGIN.getUrl(), params);
+        new RESTUtil(context).post(ServiceURL.LOGIN.BASE, params);
 
     }
 
@@ -74,7 +74,7 @@ public class UserService {
         Map<String, String> params = new HashMap<>();
         params.put("searchText", searchText);
 
-        CirkleResponse response = new RESTUtil(context).get(ServiceURL.SEARCH_USERS.getUrl(), params);
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.SEARCH_USERS.BASE, params);
 
         return UserResponseParser.getInstance().parseUsers(response.getBody());
 

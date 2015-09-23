@@ -8,6 +8,7 @@ import com.augenblick.cirkle.exception.SystemErrorCode;
 import com.augenblick.cirkle.json.JsonParser;
 import com.augenblick.cirkle.model.Cirkle;
 import com.augenblick.cirkle.model.User;
+import com.augenblick.cirkle.model.UserLocation;
 import com.augenblick.cirkle.response.CirkleResponse;
 import com.augenblick.cirkle.response.CirkleResponseParser;
 import com.augenblick.cirkle.rest.RESTUtil;
@@ -32,7 +33,7 @@ public class CirkleService {
     }
 
     public List<Cirkle> getCirkles() throws CirkleException {
-        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.getUrl());
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.BASE);
 
         return CirkleResponseParser.getInstance().parseCirkles(response.getBody());
 
@@ -57,18 +58,24 @@ public class CirkleService {
             throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED ,ex);
         }
 
-        new RESTUtil(context).post(ServiceURL.CIRCLES.getUrl(), params);
+        new RESTUtil(context).post(ServiceURL.CIRCLES.BASE, params);
 
         return null;
     }
 
     public void deleteCirkle(Cirkle cirkle) throws CirkleException {
-        new RESTUtil(context).delete(ServiceURL.CIRCLES.getUrl() + "/" + cirkle.getCirkleId());
+        new RESTUtil(context).delete(ServiceURL.CIRCLES.BASE + "/" + cirkle.getCirkleId());
     }
 
     public Cirkle getCirkle(String cirkleId) throws CirkleException {
-        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.getUrl() + "/" + cirkleId);
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.CIRCLES.BASE + "/" + cirkleId);
 
         return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
+    }
+
+    public List<UserLocation> getCirkleLocations(String cirkleId) throws CirkleException {
+        CirkleResponse response = new RESTUtil(context).get(ServiceURL.LOCATIONS.BASE + ServiceURL.LOCATIONS.CIRKLE + "/" + cirkleId);
+
+        return CirkleResponseParser.getInstance().parseCirkleLocations(response.getBody());
     }
 }

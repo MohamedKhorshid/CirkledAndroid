@@ -69,6 +69,15 @@ public class JsonParser {
         }
     }
 
+    public static double getJsonDouble(JSONObject jsonObj, String name) throws CirkleSystemException{
+
+        try {
+            return jsonObj.getDouble(name);
+        } catch (JSONException e) {
+            throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED, e);
+        }
+    }
+
     public static String getArray(List<? extends JSONifiable> array) throws JSONException {
         JSONStringer jsonArray = new JSONStringer();
         jsonArray.array();

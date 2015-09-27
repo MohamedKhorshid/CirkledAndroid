@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/login_email"
             android:hint="@string/registration.label.email"
-            android:text="mohamedwagdykhorshid@gmail.com"
             android:layout_marginTop="1dp" />
 
         <EditText
@@ -28,7 +27,6 @@
             android:ems="10"
             android:id="@+id/login_password"
             android:hint="@string/registration.label.password"
-            android:text="12345678"
             android:layout_marginTop="1dp" />
 
         <Button

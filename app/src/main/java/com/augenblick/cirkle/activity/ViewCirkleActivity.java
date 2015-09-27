@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.augenblick.cirkle.service.LocationService;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -126,7 +127,7 @@ public class ViewCirkleActivity extends FragmentActivity {
         @Override
         protected AsyncTaskResult doInBackground (String... strings){
             try {
-                List<UserLocation> locations = new CirkleService(context).getCirkleLocations(cirkleId);
+                List<UserLocation> locations = new LocationService(context).getCirkleLocations(cirkleId);
                 return new AsyncTaskResult(locations);
             } catch (CirkleException cex) {
                 return new AsyncTaskResult(cex);

@@ -7,6 +7,7 @@ import com.augenblick.cirkle.error.ErrorMessage;
 import com.augenblick.cirkle.exception.CirkleBusinessException;
 import com.augenblick.cirkle.exception.CirkleException;
 import com.augenblick.cirkle.exception.CirkleSystemException;
+import com.augenblick.cirkle.location.LocationService;
 import com.augenblick.cirkle.model.Cirkle;
 import com.augenblick.cirkle.service.CirkleService;
 import android.content.Context;
@@ -40,6 +41,8 @@ public class CirklesActivity extends Activity {
         setContentView(R.layout.waiting);
 
         new LoadCirklesTask(getApplicationContext()).execute();
+
+        startService(new Intent(this, LocationService.class));
 
     }
 

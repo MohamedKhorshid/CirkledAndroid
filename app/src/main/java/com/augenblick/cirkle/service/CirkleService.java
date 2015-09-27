@@ -39,7 +39,7 @@ public class CirkleService {
 
     }
 
-    public Cirkle addCirkle(String cirkleName, List<User> members) throws CirkleException {
+    public void addCirkle(String cirkleName, List<User> members) throws CirkleException {
 
         if(cirkleName.trim().isEmpty()) {
             throw new CirkleBusinessException(BusinessErrorCode.MISSING_REQUIRED_FIELDS);
@@ -60,7 +60,6 @@ public class CirkleService {
 
         new RESTUtil(context).post(ServiceURL.CIRCLES.BASE, params);
 
-        return null;
     }
 
     public void deleteCirkle(Cirkle cirkle) throws CirkleException {
@@ -73,9 +72,4 @@ public class CirkleService {
         return CirkleResponseParser.getInstance().parseCirkle(response.getBody());
     }
 
-    public List<UserLocation> getCirkleLocations(String cirkleId) throws CirkleException {
-        CirkleResponse response = new RESTUtil(context).get(ServiceURL.LOCATIONS.BASE + ServiceURL.LOCATIONS.CIRKLE + "/" + cirkleId);
-
-        return CirkleResponseParser.getInstance().parseCirkleLocations(response.getBody());
-    }
 }

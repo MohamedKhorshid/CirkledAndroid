@@ -51,6 +51,15 @@ public class JsonParser {
         }
     }
 
+    public static String getJsonString(JSONArray jsonArray, int index) throws CirkleSystemException{
+
+        try {
+            return (String) jsonArray.get(index);
+        } catch (JSONException e) {
+            throw new CirkleSystemException(SystemErrorCode.JSON_PARSE_FAILED, e);
+        }
+    }
+
     public static String getJsonString(JSONObject jsonObj, String name) throws CirkleSystemException{
 
         try {

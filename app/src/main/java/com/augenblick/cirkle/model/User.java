@@ -1,5 +1,8 @@
 package com.augenblick.cirkle.model;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+
 import org.json.JSONException;
 import org.json.JSONStringer;
 
@@ -11,6 +14,7 @@ public class User implements JSONifiable{
     private String userId;
     private String displayName;
     private String email;
+    private Bitmap image;
 
     public String getUserId() {
         return userId;
@@ -34,6 +38,14 @@ public class User implements JSONifiable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.augenblick.cirkle.exception.CirkleException;
 import com.augenblick.cirkle.exception.CirkleSystemException;
 import com.augenblick.cirkle.location.PositioningService;
 import com.augenblick.cirkle.model.Cirkle;
+import com.augenblick.cirkle.model.User;
 import com.augenblick.cirkle.model.UserLocation;
 import com.augenblick.cirkle.service.CirkleService;
 import android.content.Context;
@@ -20,10 +21,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,6 +38,8 @@ public class ViewCirkleActivity extends FragmentActivity {
     private MapFragment mapFragment;
 
     private Cirkle cirkle;
+
+    private HashMap<String, User> members;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +83,58 @@ public class ViewCirkleActivity extends FragmentActivity {
         LatLngBounds.Builder builder = LatLngBounds.builder();
         for(UserLocation location : locations) {
             LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions().position(latlng).title(location.getUserId());
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(latlng)
+                    .title(getUsernameByLocation(location.getUserId()))
+                    .icon(getMemberIcon(location));
+
             mapFragment.getMap().addMarker(markerOptions);
 
             builder.include(latlng);
         }
 
         mapFragment.getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
+    }
+
+    private BitmapDescriptor getMemberIcon(UserLocation location) {
+        if(members == null) {
+            return null;
+        }
+        User user = members.get(location.getUserId());
+
+        if(user == null || user.getImage() == null) {
+            return null;
+        }
+
+        return BitmapDescriptorFactory.fromBitmap(user.getImage());
+    }
+
+    private void updateMembers(List<User> users) {
+
+
+        if(members == null) {
+            members = new HashMap<String, User>();
+        } else {
+            members.clear();
+        }
+
+        if(users == null) {
+            return;
+        }
+
+        for(User user : users) {
+            members.put(user.getUserId(), user);
+        }
+    }
+
+    private String getUsernameByLocation(String userId) {
+        if(members != null) {
+            User member = members.get(userId);
+            if(member != null) {
+                return member.getDisplayName();
+            }
+        }
+        return "";
     }
 
     class LoadCirkleTask extends AsyncTask<String, Void, AsyncTaskResult>

@@ -3,6 +3,7 @@ package com.augenblick.cirkle.response;
 import com.augenblick.cirkle.exception.CirkleSystemException;
 import com.augenblick.cirkle.json.JsonParser;
 import com.augenblick.cirkle.model.Cirkle;
+import com.augenblick.cirkle.model.User;
 import com.augenblick.cirkle.model.UserLocation;
 
 import org.json.JSONArray;
@@ -57,8 +58,26 @@ public class CirkleResponseParser {
         String cirkleName = JsonParser.getJsonString(cirkleObj, "name");
         String cirkleId = JsonParser.getJsonString(cirkleObj, "_id");
 
+        String membersStr = JsonParser.getJsonString(cirkleObj, "members");
+
+        JSONArray membersArr = JsonParser.parseArray(membersStr);
+
+        List<User> members = new ArrayList<User>();
+
+        for(int i = 0; i < membersArr.length(); i++) {
+            User user = new User();
+
+            String userId = JsonParser.getJsonString(membersArr, i);
+            user.setUserId(userId);
+
+            members.add(user);
+
+        }
+
+
         cirkle.setTitle(cirkleName);
         cirkle.setCirkleId(cirkleId);
+        cirkle.setMembers(members);
         return cirkle;
     }
 

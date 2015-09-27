@@ -33,11 +33,11 @@ public class UserResponseParser {
         JSONArray usersArray = JsonParser.parseArray(json);
 
         for(int i = 0; i < usersArray.length(); i++) {
-            JSONObject cirkleObj = JsonParser.getJsonObject(usersArray, i);
+            JSONObject userObj = JsonParser.getJsonObject(usersArray, i);
 
-            String displayName = JsonParser.getJsonString(cirkleObj, "displayname");
-            String email = JsonParser.getJsonString(cirkleObj, "email");
-            String userId = JsonParser.getJsonString(cirkleObj, "_id");
+            String displayName = JsonParser.getJsonString(userObj, "displayname");
+            String email = JsonParser.getJsonString(userObj, "email");
+            String userId = JsonParser.getJsonString(userObj, "_id");
 
             User user = new User();
 
@@ -52,7 +52,4 @@ public class UserResponseParser {
         return users;
     }
 
-    public Cirkle parseCirkle(String body) {
-        return new Cirkle();
-    }
 }

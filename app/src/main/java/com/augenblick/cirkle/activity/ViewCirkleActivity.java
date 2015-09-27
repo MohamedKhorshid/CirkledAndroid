@@ -4,20 +4,24 @@ import com.augenblick.cirkle.R;
 import com.augenblick.cirkle.exception.CirkleBusinessException;
 import com.augenblick.cirkle.exception.CirkleException;
 import com.augenblick.cirkle.exception.CirkleSystemException;
+import com.augenblick.cirkle.location.PositioningService;
 import com.augenblick.cirkle.model.Cirkle;
 import com.augenblick.cirkle.model.UserLocation;
 import com.augenblick.cirkle.service.CirkleService;
 import android.content.Context;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.augenblick.cirkle.service.LocationService;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -29,17 +33,22 @@ public class ViewCirkleActivity extends FragmentActivity {
 
     private MapFragment mapFragment;
 
+    private Cirkle cirkle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.waiting);
+        setContentView(R.layout.view_cirkle);
 
         String cirkleId = getIntent().getStringExtra("cirkleId");
         String cirkleName = getIntent().getStringExtra("cirkleName");
 
+
         setTitle(cirkleName);
+
+        initMap();
 
         new LoadCirkleTask(getApplicationContext(), cirkleId).execute();
         new GetCirkleLocationsTask(getApplicationContext(), cirkleId).execute();
@@ -47,20 +56,34 @@ public class ViewCirkleActivity extends FragmentActivity {
     }
 
     private void initMap() {
+
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.cirkle_map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(GoogleMap googleMap) {
-
+            public void onMapReady(GoogleMap map) {
+                Location myLocation = new PositioningService().getLastKnownLocation(ViewCirkleActivity.this);
+                if (myLocation != null) {
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 14));
+                }
             }
         });
     }
 
+    private void updateMap() {
+        setTitle(cirkle.getTitle());
+    }
+
     private void handleUserLocations(List<UserLocation> locations) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
         for(UserLocation location : locations) {
-            MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(location.getUserId());
+            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions().position(latlng).title(location.getUserId());
             mapFragment.getMap().addMarker(markerOptions);
+
+            builder.include(latlng);
         }
+
+        mapFragment.getMap().animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 300));
     }
 
     class LoadCirkleTask extends AsyncTask<String, Void, AsyncTaskResult>
@@ -91,17 +114,15 @@ public class ViewCirkleActivity extends FragmentActivity {
                 public void handleSuccess(Object object) {
                     Cirkle cirkle = (Cirkle) object;
 
-                    ViewCirkleActivity.this.setTitle(cirkle.getTitle());
+                    ViewCirkleActivity.this.cirkle = cirkle;
 
-                    setContentView(R.layout.view_cirkle);
-
-                    initMap();
+                    updateMap();
 
                 }
 
                 @Override
                 public void handleBusinessException(CirkleBusinessException exception) {
-
+                    Toast.makeText(context, "Failed to load cirkle", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
